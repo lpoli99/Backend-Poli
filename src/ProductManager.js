@@ -48,7 +48,7 @@ class ProductManager {
     let dB = fs.readFileSync(this.path, "utf-8");
     let products = JSON.parse(dB);
 
-    const productById = products.find((product) => product.id == id);
+    const productById = products.find((product) => product.id === id);
 
     if (!productById) {
       return `Product with selected id not found!`;
@@ -60,7 +60,7 @@ class ProductManager {
     let dB = fs.readFileSync(this.path, "utf-8");
     let products = JSON.parse(dB);
 
-    let productById = products.find((product) => product.id == id);
+    let productById = products.find((product) => product.id === id);
 
     productById = prod;
     productById.id = id;
@@ -96,7 +96,7 @@ class ProductManager {
     return `Product deleted`;
   }
 }
-const products = new ProductManager("./products.json");
+const products = new ProductManager("../products.json");
 
 // products.addProduct({
 //   title: "producto 1",
@@ -114,6 +114,15 @@ const products = new ProductManager("./products.json");
 //   thumbnail: "sin imagen",
 //   code: 2,
 //   stock: 30,
+// })
+
+// products.addProduct({
+//   title: "producto 3",
+//   description: "producto test 3",
+//   price: 80,
+//   thumbnail: "sin imagen",
+//   code: 3,
+//   stock: 70,
 // })
 
 // const update = {
@@ -139,3 +148,5 @@ const products = new ProductManager("./products.json");
 // console.log(products.updateProduct(1, update));
 // console.log(products.updateProduct(2, update2));
 // console.log(products.deleteProduct(1));
+
+module.exports = ProductManager
