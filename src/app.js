@@ -1,36 +1,16 @@
-
 const express = require('express')
-const products = require('../products.json')
+const productsRouter = require('../routes/products.router.js')
+const cartsRouter = require('../routes/carts.router.js')
 const app = express()
 const PORT = 8080
 
+app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
-app.get('/products', (req, res)=> {
-    res.send(products)
-})
+app.use('/api/products', productsRouter)
 
-app.get('/products/query', (req, res) =>{
-    const {limit} = req.query
-    if (!limit) {
-        return res.send(products)
-    }
-    
-    let productsLimited = products.splice(products.length - limit)  
+app.use('/api/carts', cartsRouter)
 
-    res.send(productsLimited)
-    
-})
-
-app.get ('/products/:pid', (req, res) =>{
-    const {pid} = req.params
-    const productSearched = products.find(product => product.id === JSON.parse(pid))
-    console.log(productSearched);
-    if (!productSearched){
-        return res.send('No existe el producto solicitado')
-    }
-    return res.send(productSearched)
-})
 
 
 

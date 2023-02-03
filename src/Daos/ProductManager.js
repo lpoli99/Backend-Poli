@@ -6,15 +6,21 @@ class ProductManager {
     this.products = [];
   }
 
-  getProducts() {
-    if (fs.existsSync(this.path)) {
-      let dB = fs.readFileSync(this.path, "utf-8");
-      let products = JSON.parse(dB);
-
-      console.log(products);
-      return products;
+  getProducts = async () => {
+    try {
+      if (fs.existsSync(this.path)) {
+        let dB = fs.readFileSync(this.path, "utf-8");
+        let products = JSON.parse(dB);
+  
+        console.log(products);
+        return products;
+      }
+      return [];
+    } catch (error) {
+      return 'There are no products'
     }
-    return [];
+    
+   
   }
 
   addProduct = async (newProduct) => {
@@ -39,16 +45,17 @@ class ProductManager {
         ];
       }
       fs.promises.writeFile(this.path, JSON.stringify(productsDb, null));
+      return 'Product added'
     } catch (err) {
       console.log(err);
     }
   };
 
-  getProductById = (id) => {
+  getProductById = async (id) => {
     let dB = fs.readFileSync(this.path, "utf-8");
     let products = JSON.parse(dB);
 
-    const productById = products.find((product) => product.id === id);
+    const productById = await products.find((product) => product.id === id);
 
     if (!productById) {
       return `Product with selected id not found!`;
@@ -56,29 +63,29 @@ class ProductManager {
     return productById;
   };
 
-  updateProduct(id, prod) {
+  updateProduct = async (id, prod) => {
     let dB = fs.readFileSync(this.path, "utf-8");
     let products = JSON.parse(dB);
 
-    let productById = products.find((product) => product.id === id);
+    let productById = await products.find((product) => product.id === id);
 
     productById = prod;
     productById.id = id;
 
     products.splice(id - 1, 1, productById);
 
-    console.log(products);
 
     fs.writeFileSync(
       this.path,
       `${JSON.stringify(products, null, 2)}`,
       "utf-8"
     );
+    return products;
   }
 
-  deleteProduct(id) {
+  deleteProduct= async (id) => {
     let dB = fs.readFileSync(this.path, "utf-8");
-    let products = JSON.parse(dB);
+    let products = await JSON.parse(dB);
 
     products.splice(id - 1, 1);
 
@@ -96,7 +103,7 @@ class ProductManager {
     return `Product deleted`;
   }
 }
-const products = new ProductManager("../products.json");
+// const products = new ProductManager("../products.json");
 
 // products.addProduct({
 //   title: "producto 1",
