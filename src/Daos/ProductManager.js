@@ -1,159 +1,101 @@
-const fs = require("fs");
+import fs from "fs"
 
 class ProductManager {
-  constructor(path) {
-    this.path = path;
-    this.products = [];
+  #route = '../DB/products.json'
+  constructor() {
+    this.path = this.#route
+    this.products = []
   }
 
   getProducts = async () => {
     try {
       if (fs.existsSync(this.path)) {
         let dB = fs.readFileSync(this.path, "utf-8");
-        let products = JSON.parse(dB);
-  
-        console.log(products);
-        return products;
+        let products = JSON.parse(dB)
+
+        console.log(products)
+        return products
       }
-      return [];
+      return []
     } catch (error) {
-      return 'There are no products'
+      return "There are no products";
     }
-    
-   
   }
 
-  addProduct = async (newProduct) => {
-    let productsDb = await this.getProducts();
-
-    const data = await productsDb.find(
-      (product) => product.code === newProduct.code
-    );
+  async addProduct (title, description, price, thumbnail, code, stock, status, category) {
+    const product = {
+      title,
+      description,
+      price,
+      thumbnail,
+      code,
+      stock,
+      status,
+      category,
+    }
 
     try {
-      if (data) {
-        return `Se encuentra el producto`;
-      }
-
-      if (productsDb.length === 0) {
-        newProduct.id = 1;
-        productsDb.push(newProduct);
+      if (fs.existsSync(this.path)) {
+        
+        console.log("Exists!")
+        let data = await fs.promises.readFile(this.path, "utf-8")
+        let dataJS = JSON.parse(data)
+        product.id = dataJS[dataJS.length - 1].id + 1;
+        dataJS.push(product)
+        await fs.promises.writeFile(this.path, `${JSON.stringify(dataJS, null, 2)}`, "utf-8")
       } else {
-        productsDb = [
-          ...productsDb,
-          { ...newProduct, id: productsDb[productsDb.length - 1].id + 1 },
-        ];
+        product.id = 1
+        const arrProducts = [product]
+        await fs.promises.writeFile(this.path, `${JSON.stringify(arrProducts, null, 2)}`, "utf-8")
       }
-      fs.promises.writeFile(this.path, JSON.stringify(productsDb, null));
-      return 'Product added'
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error)
     }
-  };
+  }
 
   getProductById = async (id) => {
-    let dB = fs.readFileSync(this.path, "utf-8");
-    let products = JSON.parse(dB);
+    let dB = fs.readFileSync(this.path, "utf-8")
+    let products = JSON.parse(dB)
 
-    const productById = await products.find((product) => product.id === id);
+    const productById = await products.find((product) => product.id === id)
 
     if (!productById) {
-      return `Product with selected id not found!`;
+      return `Product with selected id not found!`
     }
-    return productById;
-  };
+    return productById
+  }
 
   updateProduct = async (id, prod) => {
-    let dB = fs.readFileSync(this.path, "utf-8");
-    let products = JSON.parse(dB);
+    let dB = fs.readFileSync(this.path, "utf-8")
+    let products = JSON.parse(dB)
 
-    let productById = await products.find((product) => product.id === id);
+    let productById = await products.find((product) => product.id === id)
 
-    productById = prod;
-    productById.id = id;
+    productById = prod
+    productById.id = id
 
-    products.splice(id - 1, 1, productById);
+    products.splice(id - 1, 1, productById)
 
-
-    fs.writeFileSync(
-      this.path,
-      `${JSON.stringify(products, null, 2)}`,
-      "utf-8"
-    );
-    return products;
+    fs.writeFileSync( this.path, `${JSON.stringify(products, null, 2)}`, "utf-8")
+    return products
   }
 
-  deleteProduct= async (id) => {
-    let dB = fs.readFileSync(this.path, "utf-8");
-    let products = await JSON.parse(dB);
+  deleteProduct = async (id) => {
+    let dB = fs.readFileSync(this.path, "utf-8")
+    let products = await JSON.parse(dB)
 
-    products.splice(id - 1, 1);
+    products.splice(id - 1, 1)
 
-    let counter = 1;
+    let counter = 1
 
     products.forEach((product) => {
-      product.id = counter++;
-    });
+      product.id = counter++
+    })
 
-    fs.writeFileSync(
-      this.path,
-      `${JSON.stringify(products, null, 2)}`,
-      "utf-8"
-    );
-    return `Product deleted`;
+    fs.writeFileSync( this.path, `${JSON.stringify(products, null, 2)}`, "utf-8")
+    return `Product deleted`
   }
 }
-// const products = new ProductManager("../products.json");
 
-// products.addProduct({
-//   title: "producto 1",
-//   description: "producto test 1",
-//   price: 20,
-//   thumbnail: "sin imagen",
-//   code: 1,
-//   stock: 25,
-// })
 
-// products.addProduct({
-//   title: "producto 2",
-//   description: "producto test 2",
-//   price: 30,
-//   thumbnail: "sin imagen",
-//   code: 2,
-//   stock: 30,
-// })
-
-// products.addProduct({
-//   title: "producto 3",
-//   description: "producto test 3",
-//   price: 80,
-//   thumbnail: "sin imagen",
-//   code: 3,
-//   stock: 70,
-// })
-
-// const update = {
-//   title: "producto update",
-//   description: "producto update 1",
-//   price: 50,
-//   thumbnail: "sin imagen",
-//   code: 4,
-//   stock: 31,
-// }
-
-// const update2 = {
-//   title: "producto update",
-//   description: "producto update 2",
-//   price: 70,
-//   thumbnail: "sin imagen",
-//   code: 098,
-//   stock: 38,
-// }
-
-// console.log(products.getProducts());
-// console.log(products.getProductById(1));
-// console.log(products.updateProduct(1, update));
-// console.log(products.updateProduct(2, update2));
-// console.log(products.deleteProduct(1));
-
-module.exports = ProductManager
+export default ProductManager

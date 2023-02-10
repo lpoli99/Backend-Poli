@@ -1,8 +1,9 @@
-const fs = require("fs");
+import fs from 'fs'
 
-class CartManager {
-    constructor(path) {
-        this.path = path;
+export class CartManager {
+  #route = '../DB/Carts.json'
+    constructor() {
+        this.path = this.#route
         this.cart = [];
     }
 
@@ -73,5 +74,3 @@ class CartManager {
 // })
 // console.log(cart.getProducts());
 // console.log(cart.getProductById(1));
-
-module.exports = CartManager

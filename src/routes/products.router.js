@@ -1,6 +1,7 @@
-const {Router} = require('express')
-const ProductManager = require('../src/Daos/ProductManager')
-const Products = new ProductManager('../src/DB/Products.json')
+import { Router } from "express"
+import ProductManager from "../Daos/ProductManager.js"
+
+const Products = new ProductManager()
 const router = Router()
 
 router.get('/', async (req, res)=> {
@@ -71,4 +72,4 @@ router.delete ('/:pid', async (req, res) =>{
 
 
 
-module.exports = router
+export default router

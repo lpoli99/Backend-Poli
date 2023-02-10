@@ -1,6 +1,7 @@
-const {Router} = require('express')
-const CartManager = require('../src/Daos/CartManager')
-const Cart = new CartManager('../src/DB/Carts.json')
+import { Router } from "express"
+import { CartManager } from "../Daos/CartManager.js"
+
+const Cart = new CartManager()
 const router = Router()
 
 router.get('/', async (req, res)=> {
@@ -40,4 +41,4 @@ router.post('/:cid/product/:pid', async (req, res) =>{
     // })
 })
 
-module.exports = router
+export default router
