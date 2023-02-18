@@ -1,0 +1,24 @@
+[
+	{
+		"title": "Product 1 (Updated)",
+		"description": "Description product",
+		"price": 100,
+		"thumbnail": "123qwerty",
+		"code": "asd123",
+		"stock": 10,
+		"category": "computers",
+		"status": true,
+		"id": 1
+	},
+	{
+		"title": "Product 2 (Updated)",
+		"description": "Description product",
+		"price": 150,
+		"thumbnail": "123asdf",
+		"code": "asd456",
+		"stock": 15,
+		"category": "cellphones",
+		"status": true,
+		"id": 2
+	}
+]

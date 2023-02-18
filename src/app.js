@@ -5,7 +5,7 @@ import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import viewsRouter from './routes/views.router.js'
 import { Server } from 'socket.io'
-import ProductManager from './Daos/ProductManager.js'
+import { ProductManager } from './Daos/ProductManager.js'
 
 const app = express()
 const PORT = 8080
@@ -14,7 +14,7 @@ const productManager = new ProductManager()
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use('/public' ,express.static(__dirname + '/public'))
+app.use('/public', express.static(__dirname + '/public'))
 
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
@@ -42,42 +42,31 @@ socketServer.on('connection', async socket => {
         console.log(error)
     }
 
-    socket.on('product', async data => {
-        console.log('data: ', data)
-
+    socket.on('product', async data => { 
         const {
             title,
             description,
             code,
             price,
-            status,
             stock,
             category,
             thumbnail
         } = data
+        data.status = true
+        console.log('data: ', data)
 
-        if (title == '' || description == '' || code == '' || price == '' || status == '' || stock == '' || category == '') {
-            console.log('todo mal');
+        if (!title || !description || !code || !price || !stock || !category) {
+            console.log('You must fill all empty spaces!');
         }else{
             try {
-                await productManager.addProduct(title, description, price, thumbnail, code, stock, status, category)
+                await productManager.addProduct(data)
                 let datos = await productManager.getProducts()
-                socketServer.emit('productoAgregado', datos)
+                socketServer.emit('productAdded', datos)
             } catch (error) {
                 console.log(error)
             }
         }
     })
-
-        try {
-            await productManager.addProduct(title, description, price, thumbnail, code, stock, status, category)
-            let data = await productManager.getProducts()
-            socketServer.emit('productAdded', data)
-        } catch (error) {
-            console.log(error)
-        }
-        
-    
 
     socket.on('deleteProduct', async data => {
         try {

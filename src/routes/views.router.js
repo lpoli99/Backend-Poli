@@ -1,5 +1,6 @@
 import { Router } from "express";
-import ProductManager from "../Daos/ProductManager.js";
+import { ProductManager } from "../Daos/ProductManager.js";
+
 const router = Router()
 const productManager = new ProductManager()
 
