@@ -17,7 +17,7 @@ router.get('/products', async (req, res)=>{
     }
 })
 
-router.get('/realtimeproducts', (req, res)=>{
+router.get('/', (req, res)=>{ // /realTimeProducts
     res.render('realTimeProducts')
 })
 
