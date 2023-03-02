@@ -6,9 +6,11 @@ import cartsRouter from './routes/carts.router.js'
 import viewsRouter from './routes/views.router.js'
 import { Server } from 'socket.io'
 import { ProductManager } from './Daos/ProductManager.js'
+import pkg from 'dotenv'
+const { DotenvConfigOptions } = pkg
 
 const app = express()
-const PORT = 8080
+const PORT = 8080 || process.env.PORT
 
 const productManager = new ProductManager()
 
@@ -31,9 +33,10 @@ const httpServer = app.listen(PORT, (err)=>{
     console.log(`Port ${PORT} Live!`)
 })
 httpServer.on
-const socketServer = new Server(httpServer)
-let products
-socketServer.on('connection', async socket => {
+const io = new Server(httpServer)
+let products  
+const mensajes = []
+io.on('connection', async socket => {
     console.log('New client conected!')
     try {
         products = await productManager.getProducts()
@@ -41,6 +44,12 @@ socketServer.on('connection', async socket => {
     } catch (error) {
         console.log(error)
     }
+
+    socket.on('message', data =>{
+        console.log('message', data);
+        mensajes.push(data)
+        io.emit('messageLogs', mensajes)
+    })
 
     socket.on('product', async data => { 
         const {
@@ -61,7 +70,7 @@ socketServer.on('connection', async socket => {
             try {
                 await productManager.addProduct(data)
                 let datos = await productManager.getProducts()
-                socketServer.emit('productAdded', datos)
+                io.emit('productAdded', datos)
             } catch (error) {
                 console.log(error)
             }
@@ -72,10 +81,14 @@ socketServer.on('connection', async socket => {
         try {
             await productManager.deleteProduct(data)
             let datos = await productManager.getProducts()
-            socketServer.emit('productDeleted', datos)
+            io.emit('productDeleted', datos)
         } catch (error) {
             console.log(error)
         }
+    })
+
+    socket.on('authenticated', data =>{
+        socket.broadcast.emit('newUserConnected', data)
     })
 })
 

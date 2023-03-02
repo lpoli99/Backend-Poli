@@ -36,6 +36,16 @@
         <input type="submit" id="submitProduct">
     </form>
 
+    <hr>
+
+    <div>
+        <input type="text" name="chatbox" id="chatBox">
+    </div>
+
+    <div>
+        <ul id="messageLogs"></ul>
+    </div>
+
     <h2>Delete Product</h2>
     <form>
         <label>Product Name</label> <br>
@@ -49,5 +59,6 @@
     <div id="container"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="../public/js/index.js"></script>

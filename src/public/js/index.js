@@ -12,6 +12,62 @@ let productTitle = document.querySelector('#titleDelete')
 let btnDelete = document.querySelector('#deleteProduct')
 let container = document.querySelector('#container')
 
+let user
+let chatbox = document.getElementById('chatBox')
+
+Swal.fire({
+    title: 'Identifícate',
+    input: 'text',
+    text: 'ingrese un usuario para identificarse.',
+    // icon: 'success',
+    inputValidator: value => {
+        return !value && 'Necesitas escribir un nombre de usuario para continuar.'
+    },
+    allowOutsideClick: false
+}).then(result => {
+    user = result.value
+    ioServer.emit('authenticated', user)
+})
+
+const handleSocket = evt => {
+    if (evt.key === "Enter") {
+        if (chatbox.value.trim().length > 0) {
+            ioServer.emit('message', {
+                user,
+                message: chatbox.value
+            })
+            chatbox.value = ''
+        }
+    }
+}
+
+chatbox.addEventListener('keyup', handleSocket)
+
+ioServer.on('messageLogs', data => {
+    let log = document.getElementById('messageLogs')
+    let messages = ''
+    data.forEach(mensajes =>{
+        messages = messages + `<li>${mensajes.user} dice: ${mensajes.message}</li> <br>`
+    })
+    log.innerHTML = messages
+})
+
+ioServer.on('newUserConnected', data =>{
+    console.log(data)
+    if (!user) return
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        title: `${data} se a conectado!`,
+        icon: "success"
+    })
+        
+    
+})
+
+
 productSub.addEventListener('click', (event)=>{
     
     event.preventDefault()
@@ -80,3 +136,4 @@ ioServer.on('productDeleted', data =>{
                                 </div>`
     })
 })
+
