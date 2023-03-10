@@ -7,5 +7,15 @@
             <p>{{this.category}}</p>
             <p>{{this.stock}}</p>
         </div>
+        <form action="../api/carts/product/{{this._id}}" method="post">
+            <button type="submit">Add to Cart</button>
+        </form>
     {{/each}}
+    {{#if hasPrevPage}}
+        <a href="/products?page={{prevPage}}&&limit={{limit}}"><button>Previous</button></a>
+    {{/if}}
+    <p>{{page}}</p>
+    {{#if hasNextPage}}
+        <a href="/products?page={{nextPage}}&&limit={{limit}}"><button>Next</button></a>
+    {{/if}}
 </div>

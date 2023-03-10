@@ -1,70 +1,72 @@
 import { Router } from "express"
-import { ProductManager } from "../Daos/ProductManager.js"
+import { ProductManagerMongo } from "../Daos/ProductManagerMongo.js"
 
-// const Products = new ProductManager()
-const productManager = new ProductManager()
+const productManagerMongo = new ProductManagerMongo()
 const router = Router()
 
 router.get('/', async (req, res) => {
-    const { limit } = req.query
-  
+  const {limit, page = 1} = req.query
     try {
-      const data = await productManager.getProducts()
-  
-      limit ? res.send(data.slice(0,limit)) : res.send(data)
+      let products = await productManagerMongo.getProducts(limit)
+      res.status(200).send(products.docs)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  })
+})
   
   router.get('/:pid', async (req, res) => {
     const { pid } = req.params
   
     try {
-      const data = await productManager.getProducts()
-  
-      pid ? res.send(data.slice(pid - 1, pid)) : res.send(data)
+      let productDb = await productManagerMongo.getProducts()
+      const productById = await productManagerMongo.getProductById(pid)
+      pid ? res.status(200).send(productById) : res.status(200).send(productDb)  
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   })
   
   router.post('/', async (req, res) => {
-    const newItem = req.body
-    newItem.status = true
-  
-    if (!newItem.title || !newItem.description || !newItem.price || !newItem.thumbnail || !newItem.code || !newItem.stock || !newItem.category)  {
-      return res.send({mensaje: 'You must fill all empty spaces!'})
-    }
-    let productDb = await productManager.getProducts()
-    const data = await productDb.find(product => product.code === newItem.code)
-  
-    if (data) {
-       res.send({mensaje: 'The code to the product already exists!'})
-    } else {
-      try {
-        await productManager.addProduct(newItem)
-        res.send({mensaje: 'Product added!'})
-      } catch (error) {
-      console.log(error);
+    let {title, description, price, thumbnail, code, stock, category, status} = req.body
+
+    try {
+      if (!title || !description || !price || !thumbnail || !code || !stock || !category || !status)  {
+        return res.status(400).send({mensaje: 'You must fill all empty spaces!'})
       }
+
+      await productManagerMongo.addProduct(
+        title,
+        description,
+        price,
+        thumbnail,
+        code,
+        stock,
+        category, 
+        status
+      )
+      res.status(201).send({message: 'Product added!'})
+      
+    } catch (error) {
+      console.log(error)
     }
   })
   
   router.put('/:pid', async (req, res) => {
+
     const { pid } = req.params
-    const newItem = req.body
-  
-    if (!newItem.title || !newItem.description || !newItem.price || !newItem.thumbnail || !newItem.code || !newItem.stock || !newItem.category)  {
-      res.send({alerta: 'You must fill all empty spaces!'})
-    } else {
-      const prod = newItem
-      try {
-        await productManager.updateProduct(pid, prod)
-        res.send({mensaje: 'Product updated!'})
-      } catch (error) {
-        console.log(error);
-      }
+    let {title, description, price, thumbnail, code, stock, category, status} = req.body
+
+    try {
+      if (!title || !description || !price || !thumbnail || !code || !stock || !category || !status)  {
+        return res.status(400).send({alerta: 'You must fill all empty spaces!'})
+      } else {
+        let product = {title, description, price, thumbnail, code, stock, category, status} 
+        await productManagerMongo.updateProduct(pid, product)
+        
+        res.status(201).send({message: 'Product updated!'})  
+      }   
+    } catch (error) {
+      console.log(error)
     }
   })
   
@@ -72,10 +74,10 @@ router.get('/', async (req, res) => {
     const { pid } = req.params
   
     try {
-      await productManager.deleteProduct(pid)
-      res.send({mensaje: 'Product deleted!'})
+      await productManagerMongo.deleteProduct(pid)
+      res.status(201).send({message: 'Product deleted!'})  
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   })
   

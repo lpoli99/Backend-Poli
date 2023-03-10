@@ -1,5 +1,5 @@
 <div>
-    <h2>Add Product</h2>
+    <h2>Add a Product</h2>
     <form>
         <label>Title</label> <br>
         <input type="text" name="title" id="title"> 
@@ -38,6 +38,18 @@
 
     <hr>
 
+    <h2>Delete a product</h2>
+    <form>
+        <label>Product Name</label>
+        <input type="text" name="title" id="titleDelete"> 
+        <br>
+        <input type="submit" id="deleteProduct">
+    </form>
+
+    <h2>All products</h2>
+
+    <div id="container"></div>
+    
     <div>
         <input type="text" name="chatbox" id="chatBox">
     </div>
@@ -46,19 +58,8 @@
         <ul id="messageLogs"></ul>
     </div>
 
-    <h2>Delete Product</h2>
-    <form>
-        <label>Product Name</label> <br>
-        <input type="text" name="title" id="titleDelete"> <br>
 
-        <input type="submit" id="deleteProduct">
-    </form>
-
-    <h2>All products</h2>
-
-    <div id="container"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="../public/js/index.js"></script>

@@ -1,13 +1,16 @@
 import express from 'express'
 import handlebars from 'express-handlebars'
-import __dirname from './utils.js'
+import __dirname from './utils/utils.js'
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import viewsRouter from './routes/views.router.js'
 import { Server } from 'socket.io'
 import { ProductManager } from './Daos/ProductManager.js'
-import pkg from 'dotenv'
-const { DotenvConfigOptions } = pkg
+import dbConnection from './config/conectionDb.js'
+import chatModel from "./models/chat.model.js"
+
+dbConnection()
+
 
 const app = express()
 const PORT = 8080 || process.env.PORT
@@ -35,42 +38,50 @@ const httpServer = app.listen(PORT, (err)=>{
 httpServer.on
 const io = new Server(httpServer)
 let products  
-const mensajes = []
+let messages
 io.on('connection', async socket => {
     console.log('New client conected!')
     try {
         products = await productManager.getProducts()
+        messages = await chatModel.find()
         socket.emit('messageServer', products)
+        socket.emit('messagesChat', products)
     } catch (error) {
         console.log(error)
     }
 
-    socket.on('message', data =>{
-        console.log('message', data);
-        mensajes.push(data)
-        io.emit('messageLogs', mensajes)
+    socket.on('msg', async data =>{
+        console.log(data)
+        try {
+            await chatModel.insertMany(data)
+            let datas = await chatModel.find()
+            io.emit('newMsg', datas)
+        } catch (error) {
+            console.log(error)
+        }
     })
 
     socket.on('product', async data => { 
+        console.log('data: ', data)
         const {
             title,
             description,
             code,
             price,
+            status,
             stock,
             category,
             thumbnail
         } = data
-        data.status = true
-        console.log('data: ', data)
+        
 
-        if (!title || !description || !code || !price || !stock || !category) {
-            console.log('You must fill all empty spaces!');
+        if (!title || !description || !code || !price || !status || !stock || !category || !thumbnail) {
+            console.log('You must fill all empty spaces!')
         }else{
             try {
                 await productManager.addProduct(data)
-                let datos = await productManager.getProducts()
-                io.emit('productAdded', datos)
+                let datas = await productManager.getProducts()
+                io.emit('productAdded', datas)
             } catch (error) {
                 console.log(error)
             }
@@ -80,15 +91,11 @@ io.on('connection', async socket => {
     socket.on('deleteProduct', async data => {
         try {
             await productManager.deleteProduct(data)
-            let datos = await productManager.getProducts()
-            io.emit('productDeleted', datos)
+            let datas = await productManager.getProducts()
+            io.emit('productDeleted', datas)
         } catch (error) {
             console.log(error)
         }
-    })
-
-    socket.on('authenticated', data =>{
-        socket.broadcast.emit('newUserConnected', data)
     })
 })
 
