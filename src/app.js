@@ -1,6 +1,6 @@
 import express from 'express'
 import handlebars from 'express-handlebars'
-import __dirname from './utils/utils.js'
+import __dirname from './utils.js'
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import viewsRouter from './routes/views.router.js'
@@ -8,9 +8,10 @@ import { Server } from 'socket.io'
 import { ProductManager } from './Daos/ProductManager.js'
 import dbConnection from './config/conectionDb.js'
 import chatModel from "./models/chat.model.js"
+import loginRouter from "./routes/login.router.js"
+import session from 'express-session'
 
 dbConnection()
-
 
 const app = express()
 const PORT = 8080 || process.env.PORT
@@ -19,13 +20,21 @@ const productManager = new ProductManager()
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use('/public', express.static(__dirname + '/public'))
+app.use('/public', express.static(__dirname+'/public'))
+
+app.use(session({
+    secret: 'secretCoder',
+    resave: true,
+    saveUninitialized: true
+}))
 
 app.engine('handlebars', handlebars.engine())
-app.set('views', __dirname + '/views')
+app.set('views', __dirname+'/views')
 app.set('view engine', 'handlebars')
 
 app.use('/', viewsRouter)
+
+app.use('/auth', loginRouter)
 
 app.use('/api/products', productsRouter)
 

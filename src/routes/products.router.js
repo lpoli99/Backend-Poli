@@ -1,5 +1,6 @@
 import { Router } from "express"
 import { ProductManagerMongo } from "../Daos/ProductManagerMongo.js"
+import validation from "../middleware/validation.js"
 
 const productManagerMongo = new ProductManagerMongo()
 const router = Router()
@@ -26,14 +27,10 @@ router.get('/', async (req, res) => {
     }
   })
   
-  router.post('/', async (req, res) => {
+  router.post('/', validation, async (req, res) => {
     let {title, description, price, thumbnail, code, stock, category, status} = req.body
 
     try {
-      if (!title || !description || !price || !thumbnail || !code || !stock || !category || !status)  {
-        return res.status(400).send({mensaje: 'You must fill all empty spaces!'})
-      }
-
       await productManagerMongo.addProduct(
         title,
         description,
@@ -51,20 +48,15 @@ router.get('/', async (req, res) => {
     }
   })
   
-  router.put('/:pid', async (req, res) => {
+  router.put('/:pid',validation, async (req, res) => {
 
     const { pid } = req.params
     let {title, description, price, thumbnail, code, stock, category, status} = req.body
 
     try {
-      if (!title || !description || !price || !thumbnail || !code || !stock || !category || !status)  {
-        return res.status(400).send({alerta: 'You must fill all empty spaces!'})
-      } else {
-        let product = {title, description, price, thumbnail, code, stock, category, status} 
-        await productManagerMongo.updateProduct(pid, product)
-        
-        res.status(201).send({message: 'Product updated!'})  
-      }   
+      let product = {title, description, price, thumbnail, code, stock, category, status} 
+      await productManagerMongo.updateProduct(pid, product)
+      res.status(201).send({message: 'Product updated!'})    
     } catch (error) {
       console.log(error)
     }

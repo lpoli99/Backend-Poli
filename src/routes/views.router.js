@@ -1,19 +1,20 @@
 import { Router } from "express";
 import { ProductManagerMongo } from "../Daos/ProductManagerMongo.js"
 import { CartManagerMongo } from "../Daos/CartManagerMongo.js"
+import authorization from "../middleware/authorization.js"
 
 const router = Router()
 
 const productManagerMongo = new ProductManagerMongo
 const cartManagerMongo = new CartManagerMongo
 
-router.get('/products', async (req, res)=>{
+router.get('/products', authorization, async (req, res)=>{
     const {limit = 1, page = 1, query} = req.query
     let filter = {}
     query ? filter = {category: query} : filter = {}
     try {
         const {docs, hasPrevPage, hasNextPage, prevPage, nextPage} = await productManagerMongo.getProducts(limit, page, filter)
-        let data = { products: docs, hasPrevPage, hasNextPage, prevPage, nextPage, page, limit, query}
+        let data = { products: docs, hasPrevPage, hasNextPage, prevPage, nextPage, page, limit, query, username: req.session.user}
         res.render('home', data)
     } catch (error) {
         console.log(error)
@@ -53,5 +54,6 @@ router.get('/chat', (req, res)=>{
 router.get('/realtimeproducts', (req, res)=>{
     res.render('realTimeProducts')
 })
+
 
 export default router
