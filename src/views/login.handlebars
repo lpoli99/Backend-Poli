@@ -1,12 +1,13 @@
 <div>
     <h1>Log in</h1>
-    <form action="auth/login" method="post">
+    <form action="login" method="post">
         <label>Email</label>
-        <input type="text" name="username" id="email">
+        <input type="text" name="username" id="email" placeholder="user@gmail.com">
         <br>
         <label>Password</label>
-        <input type="text" name="password" id="password">
+        <input type="text" name="password" id="password" placeholder="*********">
         <button type="submit" id="btnSummit">Join</button> 
+        <a href="http://localhost:8080/auth/github" id="btnGithub">Join with Github</a> 
     </form>
 </div>
 <script src="../public/js/login.js"></script>

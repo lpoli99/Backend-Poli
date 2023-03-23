@@ -1,12 +1,11 @@
 <div>
-    <h2>Products</h2>
-    <br>
     <h3>Welcome {{username}}!</h3>
-
+    <br>
     <form action="../auth/logout" method="post">
         <button id="logout">Sign off</button>
     </form>
-    
+    <br>
+    <h2>Products</h2>
     {{#each products}}
         <div>
             <h3>Title: {{this.title}}</h3>
@@ -29,4 +28,4 @@
     </div>
 </div>
 
-<script src="../public/js/home.js"
+<script src="../public/js/home.js"></script>

@@ -8,9 +8,6 @@ export class ProductManagerMongo {
         page: page,
         lean: true,
       })
-
-      console.log(products)
-
       if (!limit) {
         return products
       }

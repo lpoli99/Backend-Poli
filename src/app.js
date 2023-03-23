@@ -10,6 +10,8 @@ import dbConnection from './config/conectionDb.js'
 import chatModel from "./models/chat.model.js"
 import loginRouter from "./routes/login.router.js"
 import session from 'express-session'
+import passport from 'passport'
+import {initPassport} from "./config/passport.js"
 
 dbConnection()
 
@@ -24,12 +26,16 @@ app.use('/public', express.static(__dirname+'/public'))
 
 app.use(session({
     secret: 'secretCoder',
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: false
 }))
 
+initPassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.engine('handlebars', handlebars.engine())
-app.set('views', __dirname+'/views')
+app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
 app.use('/', viewsRouter)
