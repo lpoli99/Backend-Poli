@@ -23,15 +23,17 @@ router.post('/login', passport.authenticate('login', {failureRedirect: '/auth/fa
     try {
         if (username === 'adminCoder@coder.com' && password === 'adminCod3r123') {
             req.session.user = username
+            req.session.email = username
             req.session.admin = false
             req.session.usuario = true
             console.log('You are a admin!')
             res.redirect('http://localhost:8080/products')
         }else{
             req.session.user = username
+            req.session.email = username
             req.session.admin = true
             req.session.usuario = false
-            console.log('You are already a user')
+            console.log('You are a user!')
             res.redirect('http://localhost:8080/products')
         }
     } catch (error) {
@@ -44,11 +46,8 @@ router.get('/faillogin', (req, res)=>{
 })
 
 router.post('/register', userValidation, passport.authenticate('register', {failureRedirect: '/auth/failregister'}), async (req, res)=>{
-
     try {
-        
         res.redirect('http://localhost:8080/auth/login')
-        
     } catch (error) {
         console.log(error)
     }
@@ -74,6 +73,7 @@ router.get('/github', passport.authenticate('github', {scope: ['user: email']}))
 router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/login'}), async (req, res)=>{
     console.log('req: ', req.user)
     req.session.user = req.user.first_name
+    req.session.email = req.user.email
     req.session.admin = false
     req.session.usuario = true
     res.redirect('http://localhost:8080/products')

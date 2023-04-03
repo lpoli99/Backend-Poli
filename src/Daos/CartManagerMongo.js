@@ -13,31 +13,31 @@ export class CartManagerMongo {
 
   createCart = async () => {
     try {
-      await cartModel.create({ products: [] });
+      let cart = await cartModel.create({ products: [] })
+      return cart     
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   addProduct = async (cid, pid) => {
     try {
-      let cart = await cartModel.findOne({ _id: cid });
+      let cart = await cartModel.findOne({ _id: cid })
 
-      let product = cart.products.find((product) => product.pid == pid);
-      console.log(cid);
-
-      console.log(product);
+      let product = cart.products.find((product) => product.pid === pid)
+      console.log(cid)
+      console.log(product)
 
       if (product !== undefined) {
         await cartModel.updateOne(
           {_id: cid},
-          {$set: {"products.$[pid]": {pid: pid, quantity: product.quantity + 1}}},
+          {$set: {'products.$[pid]': {'pid': pid, 'quantity': product.quantity + 1}}},
           {arrayFilters: [{"pid.pid": pid}]}
         )
       }
 
       if (product === undefined) {
-        await cartModel.findByIdAndUpdate(cid, {$push: {products:{pid: pid, quantity: 1}}})
+        await cartModel.findByIdAndUpdate(cid, {$push: {'products':{pid: pid, quantity: 1}}})
       }
     } catch (error) {
       console.log(error)
@@ -55,7 +55,21 @@ export class CartManagerMongo {
     }
   }
 
-  deleteCartProducts = async (cid) => {
+  deleteProduct = async (cid, pid) => {
+    try {
+        let cart = await cartModel.findOne({cid: cid})
+        let products = cart.products.filter(product => product.pid !== pid)
+        console.log(products)
+        await cartModel.updateOne(
+            {cid: cid},
+            {$set: {'products': products}}
+        )
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
+  deleteAllCartProducts = async (cid) => {
     try {
         let products = []
 

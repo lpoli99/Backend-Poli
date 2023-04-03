@@ -4,6 +4,7 @@ import __dirname from './utils.js'
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import viewsRouter from './routes/views.router.js'
+import sessionsRouter from './routes/sessions.router.js'
 import { Server } from 'socket.io'
 import { ProductManager } from './Daos/ProductManager.js'
 import dbConnection from './config/conectionDb.js'
@@ -45,6 +46,8 @@ app.use('/auth', loginRouter)
 app.use('/api/products', productsRouter)
 
 app.use('/api/carts', cartsRouter)
+
+app.use('/api/sessions', sessionsRouter)
 
 const httpServer = app.listen(PORT, (err)=>{
     if (err) console.log(err)

@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
     const { pid } = req.params
   
     try {
-      let productDb = await productManagerMongo.getProducts()
+      const productDb = await productManagerMongo.getProducts()
       const productById = await productManagerMongo.getProductById(pid)
       pid ? res.status(200).send(productById) : res.status(200).send(productDb)  
     } catch (error) {
@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
   })
   
   router.post('/', validation, async (req, res) => {
-    let {title, description, price, thumbnail, code, stock, category, status} = req.body
+    const {title, description, price, thumbnail, code, stock, category, status} = req.body
 
     try {
       await productManagerMongo.addProduct(
@@ -51,10 +51,9 @@ router.get('/', async (req, res) => {
   router.put('/:pid',validation, async (req, res) => {
 
     const { pid } = req.params
-    let {title, description, price, thumbnail, code, stock, category, status} = req.body
-
+    const {title, description, price, thumbnail, code, stock, category, status} = req.body
+    let product = {title, description, price, thumbnail, code, stock, category, status} 
     try {
-      let product = {title, description, price, thumbnail, code, stock, category, status} 
       await productManagerMongo.updateProduct(pid, product)
       res.status(201).send({message: 'Product updated!'})    
     } catch (error) {
@@ -64,7 +63,6 @@ router.get('/', async (req, res) => {
   
   router.delete('/:pid', async (req, res) => {
     const { pid } = req.params
-  
     try {
       await productManagerMongo.deleteProduct(pid)
       res.status(201).send({message: 'Product deleted!'})  

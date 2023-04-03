@@ -9,7 +9,7 @@ export class CartManager {
     getCartProducts = async (cid) => {
       try {
         let dB = await fs.promises.readFile(this.path, 'utf-8')
-        let cartsDb = JSON.parse(dB);
+        let cartsDb = JSON.parse(dB)
         let cart = cartsDb[cid - 1]
         return cart.products
       } catch (error) {
@@ -33,14 +33,14 @@ export class CartManager {
 
           cartsDb.push(cart)
   
-          await fs.promises.writeFile(this.path, `${JSON.stringify(cartsDb, null, '\t')}`, 'utf-8')
+          await fs.promises.writeFile(this.path, `${JSON.stringify(cartsDb, null, 2)}`, 'utf-8')
 
         } else {
           cart.id = 1
           cart.products = []
           const arrayCart = [cart]
   
-          await fs.promises.writeFile(this.path, `${JSON.stringify(arrayCart, null, '\t')}`, 'utf-8')
+          await fs.promises.writeFile(this.path, `${JSON.stringify(arrayCart, null, 2)}`, 'utf-8')
         }
       } catch (error) {
         console.log(error)
@@ -66,7 +66,7 @@ export class CartManager {
   
         cartsDb[cid - 1] = cart
   
-        await fs.promises.writeFile(this.path, JSON.stringify(cartsDb, null, '\t'), 'utf-8')
+        await fs.promises.writeFile(this.path, JSON.stringify(cartsDb, null, 2), 'utf-8')
       } catch (error) {
         console.log(error)
       }

@@ -11,9 +11,9 @@ export class ProductManager {
       let dB = await fs.promises.readFile(this.path, 'utf-8')
       let dBJs = JSON.parse(dB)
       return dBJs
-  } catch (error) {
+    } catch (error) {
       console.log(error)
-  }
+    }
   }
 
 

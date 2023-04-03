@@ -2,11 +2,13 @@ import passport from "passport"
 import GithubStrategy from 'passport-github2'
 import local from "passport-local"
 import {UserManagerMongo} from "../Daos/UserManagerMongo.js"
+import {CartManagerMongo} from "../Daos/CartManagerMongo.js"
 import { createHash, isValidPassword } from "../utils/bcrypt.js"
 import userModel from "../models/users.model.js"
 
 const localStrategy = local.Strategy
 const userManager = new UserManagerMongo
+const cartManager = new CartManagerMongo
 
 export const initPassport = () => {
 
@@ -55,7 +57,7 @@ export const initPassport = () => {
     }))
 
     passport.use('login', new localStrategy(
-        {usernameField: 'email'},
+        {usernameField: 'username'},
         async (username, password, done) => {
             console.log('Passport Login')
             try {
@@ -64,7 +66,6 @@ export const initPassport = () => {
                     console.log('User does not exist!')
                     return done(null, false)
                 }
-
                 if(!isValidPassword(user, password)){
                     console.log('Invalid data!')
                     return done(null, false)
@@ -80,7 +81,6 @@ export const initPassport = () => {
         {passReqToCallback: true, usernameField: 'email'},
         async (req, username, password, done)=>{
             const {first_name, last_name, age, role = 'user', email} = req.body
-            let user = {first_name, last_name, age, role, email, password: createHash(password)}
             console.log('username: ', username)
             console.log('password: ', password)
             try {
@@ -89,8 +89,10 @@ export const initPassport = () => {
                     console.log('User already exist!')
                     return done(null, false)
                 }else{
-                    console.log('User succesfully created!')
+                    let cart = await cartManager.createCart()
+                    let user = {first_name, last_name, age, role, email, cart: cart._id, password: createHash(password)}
                     let result = await userManager.addUser(user)
+                    console.log('User succesfully created: ', result)
                     return done(null, result)
                 }
             } catch (error) {
