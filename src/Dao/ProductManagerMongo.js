@@ -1,4 +1,4 @@
-import productsModel from "../models/products.model.js";
+import productsModel from "./models/products.model.js"
 
 export class ProductManagerMongo {
   getProducts = async (limit, page, filter) => {
@@ -20,7 +20,7 @@ export class ProductManagerMongo {
     } catch (error) {
       console.log(error)
     }
-  };
+  }
 
   addProduct = async (
     title,
@@ -46,7 +46,7 @@ export class ProductManagerMongo {
     } catch (error) {
       console.log(error)
     }
-  };
+  }
 
   getProductById = async (pid) => {
     try {
@@ -56,7 +56,7 @@ export class ProductManagerMongo {
     } catch (error) {
       console.log(error)
     }
-  };
+  }
 
   updateProduct = async (pid, prod) => {
     try {
@@ -64,7 +64,7 @@ export class ProductManagerMongo {
     } catch (error) {
       console.log(error)
     }
-  };
+  }
 
   deleteProduct = async (pid) => {
     try {
@@ -72,5 +72,5 @@ export class ProductManagerMongo {
     } catch (error) {
       console.log(error)
     }
-  };
+  }
 }

@@ -6,9 +6,9 @@ import cartsRouter from './routes/carts.router.js'
 import viewsRouter from './routes/views.router.js'
 import sessionsRouter from './routes/sessions.router.js'
 import { Server } from 'socket.io'
-import { ProductManager } from './Daos/ProductManager.js'
+import { ProductManager } from './Dao/ProductManager.js'
 import dbConnection from './config/conectionDb.js'
-import chatModel from "./models/chat.model.js"
+import chatModel from "./Dao/models/chat.model.js"
 import loginRouter from "./routes/login.router.js"
 import session from 'express-session'
 import passport from 'passport'
@@ -63,7 +63,7 @@ io.on('connection', async socket => {
         products = await productManager.getProducts()
         messages = await chatModel.find()
         socket.emit('messageServer', products)
-        socket.emit('messagesChat', products)
+        socket.emit('messagesChat', messages)
     } catch (error) {
         console.log(error)
     }

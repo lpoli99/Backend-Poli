@@ -1,10 +1,10 @@
 import passport from "passport"
 import GithubStrategy from 'passport-github2'
 import local from "passport-local"
-import {UserManagerMongo} from "../Daos/UserManagerMongo.js"
-import {CartManagerMongo} from "../Daos/CartManagerMongo.js"
+import {UserManagerMongo} from "../Dao/UserManagerMongo.js"
+import {CartManagerMongo} from "../Dao/CartManagerMongo.js"
 import { createHash, isValidPassword } from "../utils/bcrypt.js"
-import userModel from "../models/users.model.js"
+import userModel from "../Dao/models/users.model.js"
 
 const localStrategy = local.Strategy
 const userManager = new UserManagerMongo
@@ -45,7 +45,7 @@ export const initPassport = () => {
                     age: 18,
                     role: 'user',
                     email: profile._json.email,
-                    password: '1234',
+                    password: '1234'
                 }
                 let result = await userModel.create(newUser)
                 return done(null, result)

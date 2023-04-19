@@ -1,17 +1,9 @@
 import { Router } from "express"
-import { UserManagerMongo } from "../Daos/UserManagerMongo.js"
+import SessionsController from "../controllers/sessionsController.js"
 
 const router = Router()
-const userManagerMongo = new UserManagerMongo
+const sessionsController = new SessionsController
 
-router.get('/current', async (req, res) =>{
-    try {
-        let user = await userManagerMongo.getUser(req.session.email)
-        console.log(user)
-        res.status(200).send(user)
-    } catch (error) {
-        console.log(error)
-    }
-})
+router.get('/current', sessionsController.current)
 
 export default router
