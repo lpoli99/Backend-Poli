@@ -5,10 +5,12 @@ import {UserManagerMongo} from "../Dao/UserManagerMongo.js"
 import {CartManagerMongo} from "../Dao/CartManagerMongo.js"
 import { createHash, isValidPassword } from "../utils/bcrypt.js"
 import userModel from "../Dao/models/users.model.js"
+import UserService from "../services/userService.js"
 
 const localStrategy = local.Strategy
 const userManager = new UserManagerMongo
 const cartManager = new CartManagerMongo
+const userService = new UserService
 
 export const initPassport = () => {
 
@@ -36,7 +38,7 @@ export const initPassport = () => {
         console.log('refreshToken: ', refreshToken)
         console.log('Profile: ', profile)
         try {
-            let user = await userModel.findOne({email: profile._json.email})
+            let user = await userService.getUser({email: profile._json.email})
             console.log(profile._json.email)
             if (!user) {
                 let newUser = {
@@ -47,7 +49,7 @@ export const initPassport = () => {
                     email: profile._json.email,
                     password: '1234'
                 }
-                let result = await userModel.create(newUser)
+                let result = await userService.adduser(newUser)
                 return done(null, result)
             } 
             return done(null, user)

@@ -1,6 +1,7 @@
 import { connect } from "mongoose"
+import config from "./env.js"
 
-const url = 'mongodb+srv://lpoli99:WQfT3VD9F3ZN0f85@cluster0.ysxae6l.mongodb.net/coderhouse?retryWrites=true&w=majority'
+const url = config.mongoUrl
 
 const dbConnection = async () =>{
     try {

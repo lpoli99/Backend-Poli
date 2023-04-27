@@ -25,7 +25,7 @@ class ViewsController {
         console.log(limit)
 
         try {
-            const {docs, hasPrevPage, hasNextPage, prevPage, nextPage} = await cartManagerMongo.getCartProducts(cid, limit, page)
+            const {docs, hasPrevPage, hasNextPage, prevPage, nextPage} = await viewsService.getCartProducts(cid, limit, page)
             let data = docs[0].products
             let datas = {
                 products: data,

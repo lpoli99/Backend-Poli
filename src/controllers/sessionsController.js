@@ -1,13 +1,13 @@
 import { request } from "express"
-import SessionsService from "../services/sessionsService.js"
+import UserService from "../services/userService.js"
 
-const sessionsService = new SessionsService
+const userService = new UserService
 
 class SessionsController {
     current = async (req = request, res) => {
         try {
             let email = req.session.email
-            let user = await sessionsService.getUser(email)
+            let user = await userService.getUser(email)
             console.log(user)
             res.send(user)
         } catch (error) {

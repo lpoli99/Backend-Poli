@@ -13,11 +13,12 @@ import loginRouter from "./routes/login.router.js"
 import session from 'express-session'
 import passport from 'passport'
 import {initPassport} from "./config/passport.js"
+import config from "./config/env.js"
 
 dbConnection()
 
 const app = express()
-const PORT = 8080 || process.env.PORT
+const PORT = config.Port
 
 const productManager = new ProductManager()
 

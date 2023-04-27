@@ -4,7 +4,6 @@ export class CartManagerMongo {
   getCartProducts = async (cid, limit, page) => {
     try {
       const cartProducts = await cartModel.paginate({_id: cid}, {limit: limit, page: page, lean: true})
-      console.log(cartProducts)
       return cartProducts
     } catch (error) {
       console.log(error)
@@ -25,8 +24,6 @@ export class CartManagerMongo {
       let cart = await cartModel.findOne({ _id: cid })
 
       let product = cart.products.find((product) => product.pid === pid)
-      console.log(cid)
-      console.log(product)
 
       if (product !== undefined) {
         await cartModel.updateOne(
@@ -49,7 +46,7 @@ export class CartManagerMongo {
       await cartModel.updateOne(
         {_id: cid},
         {$set: {'products': data}}
-        )
+      )
     } catch (error) {
       console.log(error)
     }
