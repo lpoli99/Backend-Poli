@@ -7,8 +7,8 @@ const userManagerMongo = new UserManagerMongo
 class UserService{
     async adduser(user){
         try {
-            let user = await userDTO.user(user)
-            return await userManagerMongo.addUser(user)
+            let userr = await userDTO.user(user)
+            return await userManagerMongo.addUser(userr)
         } catch (error) {
             console.log(error)
         }

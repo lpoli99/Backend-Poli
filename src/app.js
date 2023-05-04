@@ -14,6 +14,8 @@ import session from 'express-session'
 import passport from 'passport'
 import {initPassport} from "./config/passport.js"
 import config from "./config/env.js"
+import mockingRouter from "./routes/mocking.router.js"
+import errorMid from "./middleware/errorMid.js"
 
 dbConnection()
 
@@ -36,6 +38,8 @@ initPassport()
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use(errorMid)
+
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
@@ -49,6 +53,8 @@ app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
 
 app.use('/api/sessions', sessionsRouter)
+
+app.use ('/mockingproducts', mockingRouter)
 
 const httpServer = app.listen(PORT, (err)=>{
     if (err) console.log(err)

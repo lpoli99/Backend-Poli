@@ -11,8 +11,8 @@ router.get('/products', authorization, viewsController.productsRender)
 
 router.get('/carts/:cid', viewsController.cartsRender)
 
-router.get('/chat', viewsController.chat)
+router.get('/chat', roleUserVerify, viewsController.chat)
 
-router.get('/realtimeproducts', roleUserVerify, viewsController.realTimeProductsRender)
+router.get('/realtimeproducts',  viewsController.realTimeProductsRender)
 
 export default router
