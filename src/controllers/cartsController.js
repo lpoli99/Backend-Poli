@@ -88,8 +88,8 @@ class CartsController {
                 if (product.quantity < product.pid.stock) {
                     let updateProduct = product.pid
                     updateProduct.stock = updateProduct.stock - product.quantity
-                    amount += product.pid.productsService
-                    console.log('Update Product: ', updateProduct)
+                    amount += product.pid.price
+                    req.logger.info('Update Product: ', updateProduct)
                     await productsService.updateProduct(product.pid._id, updateProduct)
                 }else {
                     sbProducts.push(product)
@@ -97,10 +97,10 @@ class CartsController {
             }
             if(sbProducts.length === cartProducts.docs[0].products.length) return res.status(401).send ({status: 'error', error: sbProducts})
             await cartsService.arrayProductsUpdate(cid, sbProducts)
-            console.log('sbProducts', sbProducts)
+            req.logger.info('sbProducts: ', sbProducts)
             let purchase_datetime = new Date()
             let purchaser = req.session.email
-            console.log(amount, purchaser, purchase_datetime)
+            req.logger.info(amount, purchaser, purchase_datetime)
             let ticket = await ticketService.createTicket(purchase_datetime, amount, purchaser)
             res.status(201).send({
                 status: "success",

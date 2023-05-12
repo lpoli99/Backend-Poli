@@ -25,16 +25,16 @@ class LoginController {
             if (username === config.adminName && password === config.adminPassword) {
                 req.session.user = username
                 req.session.email = username
-                req.session.admin = false
-                req.session.usuario = true
-                console.log('You are a admin!')
+                req.session.admin = true
+                req.session.usuario = false
+                req.logger.info('You are a admin!')
                 res.redirect('http://localhost:8080/products')
             }else{
                 req.session.user = username
                 req.session.email = username
-                req.session.admin = true
-                req.session.usuario = false
-                console.log('You are a user!')
+                req.session.admin = false
+                req.session.usuario = true
+                req.logger.info('You are a user!')
                 res.redirect('http://localhost:8080/products')
             }
         } catch (error) {
@@ -62,7 +62,7 @@ class LoginController {
     }
 
     githubcallback = (req = request, res)=>{
-        console.log('req: ',req.user)
+        req.logger.info('req: ', req.user)
         req.session.user = req.user.first_name
         req.session.email = req.user.email
         req.session.admin = false

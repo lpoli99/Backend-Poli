@@ -1,0 +1,15 @@
+{"level":"info","message":"This is a info level Log"}
+{"level":"warning","message":"This is a warning level Log"}
+{"level":"error","message":"This is a error level Log"}
+{"level":"fatal","message":"This is a fatal level Log"}
+{"level":"info","message":"This is a info level Log"}
+{"level":"warning","message":"This is a warning level Log"}
+{"level":"error","message":"This is a error level Log"}
+{"level":"fatal","message":"This is a fatal level Log"}
+{"level":"info","message":"This is a info level Log"}
+{"level":"warning","message":"This is a warning level Log"}
+{"level":"error","message":"This is a error level Log"}
+{"level":"fatal","message":"This is a fatal level Log"}
+{"level":"info","message":"Passport Login"}
+{"level":"info","message":"Passport Login"}
+{"level":"info","message":"You are a user!"}

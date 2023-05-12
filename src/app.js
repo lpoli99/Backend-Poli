@@ -16,6 +16,8 @@ import {initPassport} from "./config/passport.js"
 import config from "./config/env.js"
 import mockingRouter from "./routes/mocking.router.js"
 import errorMid from "./middleware/errorMid.js"
+import loggerRouter from './routes/logger.router.js'
+import { addLogger } from './utils/logger.js'
 
 dbConnection()
 
@@ -39,6 +41,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use(errorMid)
+app.use(addLogger)
 
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
@@ -55,6 +58,8 @@ app.use('/api/carts', cartsRouter)
 app.use('/api/sessions', sessionsRouter)
 
 app.use ('/mockingproducts', mockingRouter)
+
+app.use('/loggerTest', loggerRouter)
 
 const httpServer = app.listen(PORT, (err)=>{
     if (err) console.log(err)

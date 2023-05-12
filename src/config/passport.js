@@ -59,17 +59,17 @@ export const initPassport = () => {
     }))
 
     passport.use('login', new localStrategy(
-        {usernameField: 'username'},
-        async (username, password, done) => {
-            console.log('Passport Login')
+        {passReqToCallback: true, usernameField: 'username'},
+        async (req, username, password, done) => {
+            req.logger.info('Passport Login')
             try {
                 let user = await userManager.getUser(username)
                 if (!user) {
-                    console.log('User does not exist!')
+                    req.logger.error('User does not exist!')
                     return done(null, false)
                 }
                 if(!isValidPassword(user, password)){
-                    console.log('Invalid data!')
+                    req.logger.error('Invalid data!')
                     return done(null, false)
                 }
                 return done(null, user)
