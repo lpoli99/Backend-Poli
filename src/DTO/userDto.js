@@ -7,7 +7,8 @@ export class UserDTO{
             role: user.role,
             email: user.email,
             cart: user.cart,
-            password: user.password
+            password: user.password,
+            owner: user.email
         }
     }
     async userByEmail(email){

@@ -1,4 +1,4 @@
-const button = document.querySelector('#btnSubmit')
+const button = document.querySelector('#btn')
 
 button.addEventListener('click', (e) =>{
     e.preventDefault()

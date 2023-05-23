@@ -1,7 +1,7 @@
 import { Router } from "express"
 import ProductsController from "../controllers/productsController.js"
 import validation from "../middleware/validation.js"
-import { roleAdminVerify } from "../middleware/roleVerify.js"
+import { roleAdminVerify, roleDeleteVerify } from "../middleware/roleVerify.js"
 
 const router = Router()
 const productsController = new ProductsController
@@ -12,8 +12,8 @@ router.get('/:pid', productsController.getProductById)
   
 router.post('/', roleAdminVerify, validation, productsController.addProduct)
   
-router.put('/:pid',validation, productsController.updateProduct)
+router.put('/:pid', validation, productsController.updateProduct)
   
-router.delete('/:pid', productsController.deleteProduct)
+router.delete('/:pid', roleDeleteVerify, productsController.deleteProduct)
   
 export default router

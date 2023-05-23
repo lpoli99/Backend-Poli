@@ -1,23 +1,25 @@
 import express from 'express'
 import handlebars from 'express-handlebars'
 import __dirname from './utils.js'
+import dbConnection from './config/conectionDb.js'
+import { Server } from 'socket.io'
+import { ProductManager } from './Dao/ProductManager.js'
+import passport from 'passport'
+import {initPassport} from "./config/passport.js"
+import session from 'express-session'
+import config from "./config/env.js"
+import chatModel from "./Dao/models/chat.model.js"
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import viewsRouter from './routes/views.router.js'
 import sessionsRouter from './routes/sessions.router.js'
-import { Server } from 'socket.io'
-import { ProductManager } from './Dao/ProductManager.js'
-import dbConnection from './config/conectionDb.js'
-import chatModel from "./Dao/models/chat.model.js"
 import loginRouter from "./routes/login.router.js"
-import session from 'express-session'
-import passport from 'passport'
-import {initPassport} from "./config/passport.js"
-import config from "./config/env.js"
 import mockingRouter from "./routes/mocking.router.js"
-import errorMid from "./middleware/errorMid.js"
 import loggerRouter from './routes/logger.router.js'
+import usersRouter from "./routes/user.router.js"
+import mailRouter from "./routes/mail.router.js"
 import { addLogger } from './utils/logger.js'
+import errorMid from "./middleware/errorMid.js"
 
 dbConnection()
 
@@ -60,6 +62,10 @@ app.use('/api/sessions', sessionsRouter)
 app.use ('/mockingproducts', mockingRouter)
 
 app.use('/loggerTest', loggerRouter)
+
+app.use('/api/users', usersRouter)
+
+app.use('/api/mail', mailRouter)
 
 const httpServer = app.listen(PORT, (err)=>{
     if (err) console.log(err)

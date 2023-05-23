@@ -6,6 +6,7 @@ import {CartManagerMongo} from "../Dao/CartManagerMongo.js"
 import { createHash, isValidPassword } from "../utils/bcrypt.js"
 import userModel from "../Dao/models/users.model.js"
 import UserService from "../services/userService.js"
+import { config } from "dotenv"
 
 const localStrategy = local.Strategy
 const userManager = new UserManagerMongo
@@ -26,7 +27,6 @@ export const initPassport = () => {
             console.log(error)
             done(error)
         }
-        
     })
 
     passport.use('github', new GithubStrategy({
@@ -85,6 +85,7 @@ export const initPassport = () => {
             const {first_name, last_name, age, role = 'user', email} = req.body
             console.log('username: ', username)
             console.log('password: ', password)
+            if (username === config.adminName && password === config.adminPassword) role = 'admin'
             try {
                 let exist = await userManager.getUser(username)
                 if(exist) {

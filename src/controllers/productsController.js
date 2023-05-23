@@ -54,9 +54,13 @@ class ProductsController {
     deleteProduct = async (req = request, res) => {
         const {pid} = req.params
         try {
-            await productsService.deleteProduct(pid)
+            const productById = await productsService.getProductById(pid)
+            if(productById.owner === req.session.email || req.session.admin){
+                await productsService.deleteProduct(pid)
+                res.send({aviso: "Product deleted!"})
+            }
 
-            res.send({aviso: "Product deleted!"})
+            res.send({aviso: "You don't have permits!"})
         } catch (error) {
             console.log(error)
         }

@@ -26,6 +26,7 @@ class LoginController {
                 req.session.user = username
                 req.session.email = username
                 req.session.admin = true
+                req.session.premium = false
                 req.session.usuario = false
                 req.logger.info('You are a admin!')
                 res.redirect('http://localhost:8080/products')
@@ -33,6 +34,7 @@ class LoginController {
                 req.session.user = username
                 req.session.email = username
                 req.session.admin = false
+                req.session.premium = false
                 req.session.usuario = true
                 req.logger.info('You are a user!')
                 res.redirect('http://localhost:8080/products')
@@ -66,6 +68,7 @@ class LoginController {
         req.session.user = req.user.first_name
         req.session.email = req.user.email
         req.session.admin = false
+        req.session.premium = false
         req.session.usuario = true
         res.redirect('http://localhost:8080/products')
     }
