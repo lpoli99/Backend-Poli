@@ -6,7 +6,7 @@ import {CartManagerMongo} from "../Dao/CartManagerMongo.js"
 import { createHash, isValidPassword } from "../utils/bcrypt.js"
 import userModel from "../Dao/models/users.model.js"
 import UserService from "../services/userService.js"
-import { config } from "dotenv"
+import config from "../config/env.js"
 
 const localStrategy = local.Strategy
 const userManager = new UserManagerMongo

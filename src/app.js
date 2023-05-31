@@ -20,6 +20,8 @@ import usersRouter from "./routes/user.router.js"
 import mailRouter from "./routes/mail.router.js"
 import { addLogger } from './utils/logger.js'
 import errorMid from "./middleware/errorMid.js"
+import swaggerJsDoc from 'swagger-jsdoc'
+import swaggerUiExpress from 'swagger-ui-express'
 
 dbConnection()
 
@@ -48,6 +50,21 @@ app.use(addLogger)
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentación de Proyecto CoderHouse Curso Backend',
+            description: 'Proyecto desarrollado por Luciano Poli'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJsDoc(swaggerOptions)
+
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 app.use('/', viewsRouter)
 

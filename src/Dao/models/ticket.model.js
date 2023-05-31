@@ -4,7 +4,8 @@ const ticketCollection = "tickets"
 
 const ticketSchema = new Schema({
     code: {
-        type: String
+        type: String,
+        default: 5
     },
     purchase_datetime: {
         type: String
