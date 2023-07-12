@@ -65,23 +65,14 @@ const swaggerOptions = {
 const specs = swaggerJsDoc(swaggerOptions)
 
 app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
-
 app.use('/', viewsRouter)
-
 app.use('/auth', loginRouter)
-
 app.use('/api/products', productsRouter)
-
 app.use('/api/carts', cartsRouter)
-
 app.use('/api/sessions', sessionsRouter)
-
 app.use ('/mockingproducts', mockingRouter)
-
 app.use('/loggerTest', loggerRouter)
-
 app.use('/api/users', usersRouter)
-
 app.use('/api/mail', mailRouter)
 
 const httpServer = app.listen(PORT, (err)=>{
@@ -126,8 +117,6 @@ io.on('connection', async socket => {
             category,
             thumbnail
         } = data
-        
-
         if (!title || !description || !code || !price || !status || !stock || !category || !thumbnail) {
             console.log('You must fill all empty spaces!')
         }else{

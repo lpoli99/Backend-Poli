@@ -4,7 +4,7 @@ import local from "passport-local"
 import {UserManagerMongo} from "../Dao/UserManagerMongo.js"
 import {CartManagerMongo} from "../Dao/CartManagerMongo.js"
 import { createHash, isValidPassword } from "../utils/bcrypt.js"
-import userModel from "../Dao/models/users.model.js"
+import UserModel from "../Dao/models/users.model.js"
 import UserService from "../services/userService.js"
 import config from "../config/env.js"
 
@@ -21,7 +21,7 @@ export const initPassport = () => {
 
     passport.deserializeUser(async (id, done)=>{
         try {
-            let user = await userModel.findById(id)
+            let user = await UserModel.findById(id)
             done(null, user)
         } catch (error) {
             console.log(error)
@@ -49,7 +49,7 @@ export const initPassport = () => {
                     email: profile._json.email,
                     password: '1234'
                 }
-                let result = await userService.adduser(newUser)
+                let result = await userService.addUser(newUser)
                 return done(null, result)
             } 
             return done(null, user)

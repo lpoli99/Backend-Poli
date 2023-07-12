@@ -1,6 +1,7 @@
 import {TicketManagerMongo} from "../Dao/TicketManagerMongo.js"
 
 const ticketManager = new TicketManagerMongo
+
 class TicketService{
     async createTicket(purchase_datetime, amount, purchaser){
         try {
@@ -10,4 +11,5 @@ class TicketService{
         }
     }
 }
+
 export default TicketService

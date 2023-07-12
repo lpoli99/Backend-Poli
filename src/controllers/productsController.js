@@ -8,7 +8,6 @@ class ProductsController {
         const {limit, page = 1} = req.query
         try {
             let data = await productsService.getProducts(limit)
-
             res.send(data.docs)
         } catch (error) {
             console.log(error)
@@ -20,7 +19,6 @@ class ProductsController {
         try {
             const allProducts = await productsService.getProducts()
             const productById = await productsService.getProductById(pid)
-
             pid ? res.send(productById) : res.send(allProducts)
         } catch (error) {
             console.log(error)
@@ -30,9 +28,8 @@ class ProductsController {
     addProduct = async (req = request, res) => {
         const { title, description, code, price, status, stock, category, thumbnail } = req.body
         try {
-            await productsService.addProduct(title, description, code, price, status, stock, category, thumbnail)
-
-            res.send({aviso: "Product added!"})
+            let product = await productsService.addProduct(title, description, code, price, status, stock, category, thumbnail)
+            res.send(product)
         } catch (error) {
             console.log(error)
         }
@@ -44,10 +41,10 @@ class ProductsController {
         let  obj =  { title, description, code, price, status, stock, category, thumbnail }
         try {
             await productsService.updateProduct(pid, obj)
-
             res.send({aviso: "Product updated!"})
         } catch (error) {
             console.log(error)
+            res.send({aviso: "Error!"})
         }
     }
 
@@ -55,11 +52,10 @@ class ProductsController {
         const {pid} = req.params
         try {
             const productById = await productsService.getProductById(pid)
-            if(productById.owner === req.session.email || req.session.admin){
+            if(productById.owner === req.session.email || req.session?.admin){
                 await productsService.deleteProduct(pid)
                 res.send({aviso: "Product deleted!"})
             }
-
             res.send({aviso: "You don't have permits!"})
         } catch (error) {
             console.log(error)

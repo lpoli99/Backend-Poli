@@ -1,7 +1,8 @@
 import CustomError from "../errors/CustomError.js"
 import EErrors from "../errors/enum.js"
 import { generateProductErrorInfo } from "../errors/info.js"
-function validation (req, res, next){
+
+export function validation (req, res, next){
     const {title, description, price, thumbnail, code, stock, category, status} = req.body
     if (!title || !description || !price || !thumbnail || !code || !stock || !category || !status)  {
         CustomError.createError({
@@ -14,5 +15,3 @@ function validation (req, res, next){
     }
     return next()
 }
-
-export default validation

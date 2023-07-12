@@ -11,12 +11,9 @@ let thumbnail = document.querySelector('#thumbnail')
 let productTitle = document.querySelector('#titleDelete')
 let btnDelete = document.querySelector('#deleteProduct')
 let container = document.querySelector('#container')
-let chatbox = document.getElementById('chatBox')
 
 productSub.addEventListener('click', (e)=>{
-    
     e.preventDefault()
-
     let product = {
         title: title.value,
         description: description.value,
@@ -27,16 +24,15 @@ productSub.addEventListener('click', (e)=>{
         category: category.value,
         thumbnail: thumbnail.value
     }
-
     ioServer.emit('product', product)
 })
 
 btnDelete.addEventListener('click', (e)=>{
     e.preventDefault()
 
-    let productId = productTitle.value
+    let pid = productTitle.value
 
-    ioServer.emit('deleteProduct', productId)
+    ioServer.emit('deleteProduct', pid)
 })
 
 ioServer.on('messageServer', data =>{

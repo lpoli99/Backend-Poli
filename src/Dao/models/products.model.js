@@ -2,7 +2,8 @@ import { Schema, model } from "mongoose"
 import mongoosePaginate from "mongoose-paginate-v2"
 
 const productCollection = 'products'
-const ProductSchema = Schema({
+
+const productSchema = Schema({
     title: {
         type: String,
         required: true
@@ -14,7 +15,6 @@ const ProductSchema = Schema({
     code: {
         type: Number,
         required: true,
-        unique: true
     },
     price: {
         type: Number,
@@ -36,9 +36,14 @@ const ProductSchema = Schema({
         type: String,
         required: true,
         unique: true
+    },
+    owner: {
+        type: String,
+        required: true,
+        default: 'admin'
     }
 })
 
-ProductSchema.plugin(mongoosePaginate)
+productSchema.plugin(mongoosePaginate)
 
-export default model(productCollection, ProductSchema)
+export default model(productCollection, productSchema)

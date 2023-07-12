@@ -5,8 +5,8 @@ const productManagerMongo = new ProductManagerMongo
 const cartManagerMongo = new CartManagerMongo
 
 class ViewsService{
-    async getProducts(limit, page, filtro){
-        return await productManagerMongo.getProducts(limit, page, filtro)
+    async getProducts(limit, page, filter){
+        return await productManagerMongo.getProducts(limit, page, filter)
     }
 
     async getCartProducts(cid, limit, page){

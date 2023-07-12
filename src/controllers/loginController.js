@@ -1,34 +1,27 @@
 import { request } from "express"
 import config from "../config/env.js"
+import UserService from "../services/userService.js"
+
+const userService = new UserService
 
 class LoginController {
     loginRender = (req = request, res)=>{
         res.render('login')
     }
 
-    registerRender = (req = request, res)=>{
-        res.render('register')
-    }
-
-    failLoginRender = (req = request, res)=>{
-        res.send({status: 'error', message: 'Login failed!'})
-    }
-
-    failRegisterRender = (req = request, res)=>{
-        res.send({status: 'error', message: 'Register failed!'})
-    }
-
-    loginVoid = (req = request, res)=>{
+    loginVoid = async (req = request, res)=>{
         const { username, password } = req.body
 
         try {
-            if (username === config.adminName && password === config.adminPassword) {
+            if (username === config.adminName || password === config.adminPassword) {
                 req.session.user = username
                 req.session.email = username
                 req.session.admin = true
                 req.session.premium = false
                 req.session.usuario = false
                 req.logger.info('You are a admin!')
+                let last_connection = new Date()
+                await userService.updateLastConn(username, last_connection)
                 res.redirect('http://localhost:8080/products')
             }else{
                 req.session.user = username
@@ -37,11 +30,21 @@ class LoginController {
                 req.session.premium = false
                 req.session.usuario = true
                 req.logger.info('You are a user!')
+                let last_connection = new Date()
+                await userService.updateLastConn(username, last_connection)
                 res.redirect('http://localhost:8080/products')
             }
         } catch (error) {
             console.log(error)
         }
+    }
+    
+    failLoginRender = (req = request, res)=>{
+        res.send({status: 'error', message: 'Login failed!'})
+    }
+
+    registerRender = (req = request, res)=>{
+        res.render('register')
     }
 
     registerVoid = (req = request, res)=>{
@@ -50,6 +53,10 @@ class LoginController {
         } catch (error) {
             console.log(error)
         }
+    }
+
+    failRegisterRender = (req = request, res)=>{
+        res.send({status: 'error', message: 'Register failed!'})
     }
 
     logoutVoid = (req = request, res)=>{

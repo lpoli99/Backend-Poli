@@ -1,4 +1,4 @@
-function userValidation (req, res, next){
+export function userValidation (req, res, next){
     const { first_name, last_name, age, role = 'user', email, password } = req.body
 
     if (first_name === '' || last_name === '' || age === '' || role === '' || email === '' || password === '') {
@@ -6,5 +6,3 @@ function userValidation (req, res, next){
     }
     return next()
 }
-
-export default userValidation

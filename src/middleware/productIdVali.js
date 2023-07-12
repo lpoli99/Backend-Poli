@@ -9,7 +9,7 @@ export default async function productIdVali (req, res, next){
     const {pid} = req.params
     try {
         let product = await productsService.getProductById(pid)
-        console.log('----------product------------', product)
+        console.log('--------product--------', product)
         if (!product) {
             CustomError.createError({
                 name: 'Product not found',

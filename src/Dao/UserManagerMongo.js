@@ -1,10 +1,10 @@
-import usersModel from "./models/users.model.js"
+import UserModel from "./models/users.model.js"
 
 export class UserManagerMongo{
 
     addUser = async (user) =>{
         try {
-            return await usersModel.create(user)
+            return await UserModel.create(user)
         } catch (error) {
             console.log(error)
         }
@@ -12,7 +12,7 @@ export class UserManagerMongo{
 
     getUsers = async() =>{
         try {
-            let users = await usersModel.find()
+            let users = await UserModel.find()
             return users
         } catch (error) {
             console.log(error)
@@ -21,7 +21,7 @@ export class UserManagerMongo{
 
     getUser = async(email) =>{
         try {
-            let user = await usersModel.findOne({email: email})
+            let user = await UserModel.findOne({email: email})
             return user
         } catch (error) {
             console.log(error)
@@ -30,10 +30,10 @@ export class UserManagerMongo{
 
     updateUser = async(email, password) =>{
         try {
-            console.log('MongoUserDAO')
-            console.log('email MongoUserDAO: ', email)
-            console.log('password MongoUserDAO: ', password)
-            let user = await usersModel.findOne({email: email})
+            console.log('MongoUserDao')
+            console.log('Email MongoUserDao: ', email)
+            console.log('Password MongoUserDao: ', password)
+            let user = await UserModel.findOne({email: email})
             let changeUser = {
                 first_name: user.first_name,
                 last_name: user.last_name,
@@ -43,12 +43,12 @@ export class UserManagerMongo{
                 cart: user.cart,
                 password: password
             }
-            console.log('user: ', user)
-            console.log('user.password: ', user.password)
-            await usersModel.findOneAndDelete({_id: user._id})
+            console.log('User: ', user)
+            console.log('User Password: ', user.password)
+            await UserModel.findOneAndDelete({_id: user._id})
             console.log('User deleted!')
-            let newUser = await usersModel.create(changeUser)
-            console.log('newUser: ', newUser)
+            let newUser = await UserModel.create(changeUser)
+            console.log('New User: ', newUser)
             return newUser
         } catch (error) {
             console.log(error)
@@ -57,7 +57,7 @@ export class UserManagerMongo{
 
     updateRole = async(email, role) =>{
         try {
-            let user = await usersModel.updateOne(
+            let user = await UserModel.updateOne(
                 {email: email},
                 {$set: {'role': role}}
             )
@@ -66,4 +66,30 @@ export class UserManagerMongo{
             console.log(error)
         }
     }
+
+    updateLastConn = async(email, data) => {
+        try {
+            let user = await UserModel.updateOne(
+                {email: email},
+                {$set: {'last_connection': data}}
+            )
+            return user
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    uploadDoc = async(email, data) => {
+        try {
+            console.log('Data Manager', data)
+            let user = await UserModel.updateOne(
+                {email: email},
+                {$set: {'documents': data}}
+            )
+            return user
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 }
