@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon src/app.js",
+    "dev": "nodemon src/app.js",
     "start": "node src/app.js",
     "test1": "mocha test/products.test.js",
     "test2": "mocha test/carts.test.js",
